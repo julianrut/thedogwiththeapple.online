@@ -70,7 +70,7 @@ function start(){
         document.getElementById("taskbar").style.opacity = 100
    }, 3000);
 
-   setTimeout(() => {
-        document.getElementById("music").play()
-   }, 9000);
+//    setTimeout(() => {
+//         document.getElementById("music").play()
+//    }, 9000);
 }
