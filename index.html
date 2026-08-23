@@ -1,0 +1,429 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Dog With The Apple</title>
+    <meta name="description" content="An ambient music project by Julian R.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://thedogwiththeapple.online/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://thedogwiththeapple.online/">
+    <meta property="og:title" content="The Dog With The Apple">
+    <meta property="og:description" content="An ambient music project by Julian R.">
+    <meta property="og:image" content="https://thedogwiththeapple.online/media/apple.png">
+    <meta property="og:image:alt" content="An apple from The Dog With The Apple">
+    <meta property="og:site_name" content="The Dog With The Apple">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Dog With The Apple">
+    <meta name="twitter:description" content="An ambient music project by Julian R.">
+    <meta name="twitter:image" content="https://thedogwiththeapple.online/media/apple.png">
+    <meta name="twitter:image:alt" content="An apple from The Dog With The Apple">
+    <link rel="shortcut icon" href="/media/apple.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <script src="script.js"></script>
+
+    
+
+    <style type="text/css">* { cursor: url('data:image/x-icon;base64,AAACAAEAICAQAAAAAADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAAAAAAAAA////AAgICAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACIAAAAAAAAAAAAAAAAAAAIRIAAAAAAAAAAAAAAAAAACESAAAAAAAAAAAAAAAAAAIRIAAAAAAAAAAAAAACAAACESAAAAAAAAAAAAAAAiAAIRIAAAAAAAAAAAAAAAISACESAAAAAAAAAAAAAAACESIRIAAAAAAAAAAAAAAAAhESESIiIgAAAAAAAAAAAAIRERERESAAAAAAAAAAAAACERERERIAAAAAAAAAAAAAAhEREREgAAAAAAAAAAAAAAIRERESAAAAAAAAAAAAAAACERERIAAAAAAAAAAAAAAAAhEREgAAAAAAAAAAAAAAAAIRESAAAAAAAAAAAAAAAAACERIAAAAAAAAAAAAAAAAAAhEgAAAAAAAAAAAAAAAAAAISAAAAAAAAAAAAAAAAAAACIAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///////////////////////////////////////////////////////5////8P////D////h///74f//+cP///jD///4B///+AA///gAf//4AP//+AH///gD///4B///+A////gf///4P///+H////j////5////+/////////w=='), auto; }</style>
+</head>
+<body>
+    <div class="centered noselect" id="loading_screen">
+        <div class="window" style="width: 300px">
+    <!-- <div class="title-bar">
+        <div class="title-bar-text">The Dog With The Apple</div>
+        <div class="title-bar-controls">
+            <button onclick="error_sound()" aria-label="Minimize"></button>
+            <button onclick="maximize()" aria-label="Maximize"></button>
+            <button onclick="error_sound()" aria-label="Close"></button>
+        </div>
+    </div> -->
+    <div class="window-body">
+        <p>Loading webpage</p>
+        <div class="progress-indicator">
+            <span id="loading_webpage_progressbar" class="progress-indicator-bar"  style="width: 0%;"></span>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <div class="centered noselect hidden" id="start_prompt">
+        <div class="window" style="width: 300px">
+            <div class="title-bar">
+                <div class="title-bar-text">The Dog With The Apple</div>
+                <div class="title-bar-controls">
+                    <button onclick="error_sound()" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <p>Would you like to start?</p>
+                <section class="field-row" style="justify-content: flex-end">
+                    <button onclick="start()">Start</button>
+                    <button onclick="shutdown()">Shutdown</button>
+                </section>
+            </div>
+        </div>
+    </div>
+
+   <style>
+       #all_windows { position: relative; min-height: 100vh; }
+       #all_windows > .window { position: absolute; margin: 0; touch-action: none; }
+       #all_windows > .window > .title-bar { cursor: move; user-select: none; }
+       #all_windows > .window.dragging { box-shadow: 3px 3px 0 #000; }
+    #all_windows > .window.minimized { display: none; }
+       #taskbar {
+           position: fixed;
+           z-index: 10000;
+           right: 0;
+           bottom: 0;
+           left: 0;
+           display: flex;
+           align-items: center;
+           min-height: 28px;
+           padding: 2px 4px;
+           box-sizing: border-box;
+           border-top: 2px solid #fff;
+           background: #c0c0c0;
+           box-shadow: inset 0 1px #dfdfdf;
+       }
+    #taskbar.hidden { display: flex !important; }
+       #taskbar .start-button { height: 24px; min-width: 70px; font-weight: bold; }
+       #taskbar .start-button img { width: 16px; height: 16px; margin-right: 4px; vertical-align: middle; }
+    #taskbar .window-tasks { display: flex; flex: 1; min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
+    #taskbar .task-button { flex: 0 0 auto; overflow: hidden; height: 24px; min-width: 150px; max-width: 220px; margin-left: 4px; text-align: left; white-space: nowrap; text-overflow: ellipsis; }
+       #taskbar .task-button.active { box-shadow: inset 1px 1px #808080, inset -1px -1px #fff; background: #d4d0c8; }
+       #start-menu {
+           position: fixed;
+           z-index: 10001;
+           left: 4px;
+           bottom: 34px;
+           display: none;
+           width: 220px;
+           padding: 3px;
+           border: 2px solid;
+           border-color: #fff #000 #000 #fff;
+           background: #c0c0c0;
+           box-shadow: 2px 2px #000;
+       }
+       #start-menu.open { display: flex; }
+       #start-menu .menu-sidebar {
+           display: flex;
+           align-items: flex-end;
+           width: 28px;
+           margin-right: 4px;
+           padding: 4px 2px;
+           box-sizing: border-box;
+           color: #fff;
+           background: #000080;
+           writing-mode: vertical-rl;
+           transform: rotate(180deg);
+           font-weight: bold;
+       }
+       #start-menu .menu-items {
+           display: flex;
+           flex: 1;
+           min-height: 132px;
+           padding: 2px;
+           flex-direction: column;
+       }
+       #start-menu button {
+           display: flex;
+           align-items: center;
+           width: 100%;
+           min-height: 30px;
+           padding: 3px 6px;
+           border: 2px solid;
+           border-color: #fff #000 #000 #fff;
+           background: #c0c0c0;
+           font: inherit;
+           text-align: left;
+       }
+       #start-menu button:active {
+           border-color: #000 #fff #fff #000;
+           padding: 4px 5px 2px 7px;
+       }
+       #start-menu button img {
+           flex: 0 0 20px;
+           width: 20px;
+           height: 20px;
+           margin: 0 8px 0 1px;
+           object-fit: contain;
+       }
+       #start-menu .menu-items button { margin-top: auto; }
+   </style>
+   <div id="all_windows" class="hidden noselect">
+        <div id="myimage" class="window" style="width: 215px">
+            <div class="title-bar">
+                <div class="title-bar-text">The Dog With The Apple</div>
+                <div class="title-bar-controls">
+                    <button onclick="minimizeWindow(this)" aria-label="Minimize"></button>
+                    <button onclick="error_sound()" aria-label="Maximize"></button>
+                    <button onclick="error_sound()" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <img draggable="false" style="width:200px; height:auto" src="/media/thedog.jpg" alt="">
+            </div>
+        </div>
+
+        <div id="aboutme" class="window" style="width: 350px">
+            <div class="title-bar">
+                <div class="title-bar-text">About Me</div>
+                <div class="title-bar-controls">
+                    <button onclick="minimizeWindow(this)" aria-label="Minimize"></button>
+                    <button onclick="error_sound()" aria-label="Maximize"></button>
+                    <button onclick="error_sound()" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <p><strong>The Dog With The Apple</strong> is an ambient music project created by <strong>Julian R.</strong> - a rookie artist from Poland.</p>
+                <p>Julian, inspired by artists such as <strong>Brian Eno, C418 & Aphex Twin</strong>, started creating in <strong>late 2024.</strong></p>
+                <p>Currently, he released just one album, with another one coming soon.</p>
+            </div>
+        </div>
+
+        <div id="links" class="window" style="width: 200px">
+            <div class="title-bar">
+                <div class="title-bar-text">Links</div>
+                <div class="title-bar-controls">
+                    <button onclick="minimizeWindow(this)" aria-label="Minimize"></button>
+                    <button onclick="error_sound()" aria-label="Maximize"></button>
+                    <button onclick="error_sound()" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <p>Here are some of my links you could check out:</p>
+                <ul style="cursor:pointer">
+                    <li><a class="link_color" target="_blank" href="https://open.spotify.com/artist/50DMsC9w7DM8IFilWPLVO8?si=d42839909e1a47d4">Spotify</a></li>
+                    <li><a class="link_color" target="_blank" href="https://www.instagram.com/julianrdot">Instagram</a></li>
+                    <li><a class="link_color" target="_blank" href="http://julianr.bandcamp.com/">Bandcamp</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="debut_album" class="window minimized" style="width: 300px">
+            <div class="title-bar">
+                <div class="title-bar-text">Debut Album</div>
+                <div class="title-bar-controls">
+                    <button onclick="minimizeWindow(this)" aria-label="Minimize"></button>
+                    <button onclick="error_sound()" aria-label="Maximize"></button>
+                    <button onclick="error_sound()" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <div style="display: flex; gap: 10px; align-items: flex-start;">
+                    <img draggable="false" src="/media/album1.webp" alt="Debut Album" width="100" height="100">
+                    <div>
+                        <strong>The Dog With The Apple</strong>
+                        <ul>
+                            <li>We're Having Fun!</li>
+                            <li>I Love You</li>
+                            <li>I Don't Want To Lose You</li>
+                            <li>Isn't It Nice</li>
+                            <li>To Be Gentle With Yourself</li>
+                            <li>The Kids Are Upstairs, Asleep</li>
+                            <li>Dog</li>
+                            <li>Apple</li>
+                            <li>Ending Of A Space Movie</li>
+                            <li>Up And Down</li>
+                            <li>Reminiscing</li>
+                            <li>Your First Memory</li>
+                            <li>Your Last Memory</li>
+                            <li>Bye Bye!</li>
+                        </ul>
+                    </div>
+                </div>
+                <p>
+                    <button onclick="window.open('https://open.spotify.com/album/1wpl4UnbR3j0mx5eaX6DdN?si=ea0f037c198f49ea')">Spotify</button>
+                    <button onclick="window.open('https://music.apple.com/us/album/the-dog-with-the-apple/1792615143')">Apple Music</button>
+                    <button onclick="window.open('https://www.youtube.com/watch?v=k0V3D4r1o9Q&list=OLAK5uy_k0EqMaCx7laHuv6kMjfTKt04kAQ83AuDE')">YouTube</button>
+                </p>
+            </div>
+        </div>
+
+        <div id="sound" class="window minimized" style="width: 220px">
+            <div class="title-bar">
+                <div class="title-bar-text">Sound</div>
+                <div class="title-bar-controls">
+                    <button onclick="minimizeWindow(this)" aria-label="Minimize"></button>
+                    <button onclick="error_sound()" aria-label="Maximize"></button>
+                    <button onclick="error_sound()" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <p id="mute_status">Sound is on.</p>
+                <button id="mute_button" type="button" onclick="toggleMute()">Mute page</button>
+            </div>
+        </div>
+
+        
+   </div>
+
+    <div id="taskbar" class="noselect hidden" style="opacity: 0;" aria-label="Taskbar">
+       <button class="start-button" type="button" onclick="toggleStartMenu()"><img src="/media/apple.png" alt="">Start</button>
+         <div class="window-tasks" aria-label="Open windows"></div>
+   </div>
+   <div id="start-menu" class="noselect" role="menu" aria-label="Start menu">
+       <div class="menu-sidebar">Windows 98</div>
+       <div class="menu-items">
+           <button type="button" onclick="shutdown(); closeStartMenu();"><img src="/media/shutdown.png" alt="">Shut Down...</button>
+       </div>
+   </div>
+
+   <script>
+       function toggleMute() {
+           var muted = !document.body.classList.contains('page-muted');
+           document.querySelectorAll('audio, video').forEach(function (media) {
+               media.muted = muted;
+           });
+           document.body.classList.toggle('page-muted', muted);
+           document.getElementById('mute_status').textContent = muted ? 'Sound is muted.' : 'Sound is on.';
+           document.getElementById('mute_button').textContent = muted ? 'Unmute page' : 'Mute page';
+       }
+
+       (function () {
+           function enableDragging() {
+               var desktop = document.getElementById('all_windows');
+               if (!desktop) return;
+               var zIndex = 10;
+
+               function arrangeWindows() {
+                   var windows = Array.from(desktop.querySelectorAll(':scope > .window'));
+                   var desktopWidth = desktop.clientWidth;
+                   var desktopHeight = Math.max(window.innerHeight, desktop.clientHeight);
+                   var positions = [
+                       { x: 0.08, y: 0.14 },
+                       { x: 0.62, y: 0.38 },
+                       { x: 0.34, y: 0.68 },
+                       { x: 0.76, y: 0.10 },
+                       { x: 0.16, y: 0.76 }
+                   ];
+
+                   windows.forEach(function (windowElement, index) {
+                       var position = positions[index % positions.length];
+                       var jitterX = (Math.random() - 0.5) * 80;
+                       var jitterY = (Math.random() - 0.5) * 60;
+                       var maxX = Math.max(0, desktopWidth - windowElement.offsetWidth);
+                       var maxY = Math.max(0, desktopHeight - windowElement.offsetHeight);
+                       var x = Math.max(0, Math.min(position.x * desktopWidth + jitterX, maxX));
+                       var y = Math.max(0, Math.min(position.y * desktopHeight + jitterY, maxY));
+
+                       windowElement.style.left = x + 'px';
+                       windowElement.style.top = y + 'px';
+                       windowElement.style.zIndex = ++zIndex;
+                   });
+               }
+
+               function arrangeWhenVisible() {
+                   if (!desktop.classList.contains('hidden') && desktop.clientWidth > 0) {
+                       arrangeWindows();
+                   }
+               }
+
+               arrangeWhenVisible();
+
+               new MutationObserver(function () {
+                   arrangeWhenVisible();
+               }).observe(desktop, { attributes: true, attributeFilter: ['class', 'style'] });
+
+               window.addEventListener('resize', arrangeWhenVisible);
+
+               desktop.querySelectorAll(':scope > .window').forEach(function (windowElement) {
+                   var titleBar = windowElement.querySelector('.title-bar');
+                   if (!titleBar) return;
+
+                   titleBar.addEventListener('pointerdown', function (event) {
+                       if (event.target.closest('.title-bar-controls')) return;
+                       event.preventDefault();
+
+                       var desktopRect = desktop.getBoundingClientRect();
+                       var windowRect = windowElement.getBoundingClientRect();
+                       var startX = event.clientX - windowRect.left;
+                       var startY = event.clientY - windowRect.top;
+
+                       windowElement.style.left = (windowRect.left - desktopRect.left) + 'px';
+                       windowElement.style.top = (windowRect.top - desktopRect.top) + 'px';
+                       windowElement.style.zIndex = ++zIndex;
+                       windowElement.classList.add('dragging');
+                       titleBar.setPointerCapture(event.pointerId);
+
+                       function move(moveEvent) {
+                           var x = moveEvent.clientX - desktopRect.left - startX;
+                           var y = moveEvent.clientY - desktopRect.top - startY;
+                           var maxX = Math.max(0, desktop.clientWidth - windowElement.offsetWidth);
+                           var maxY = Math.max(0, desktop.clientHeight - windowElement.offsetHeight);
+                           windowElement.style.left = Math.max(0, Math.min(x, maxX)) + 'px';
+                           windowElement.style.top = Math.max(0, Math.min(y, maxY)) + 'px';
+                       }
+
+                       function stop() {
+                           windowElement.classList.remove('dragging');
+                           titleBar.removeEventListener('pointermove', move);
+                           titleBar.removeEventListener('pointerup', stop);
+                           titleBar.removeEventListener('pointercancel', stop);
+                       }
+
+                       titleBar.addEventListener('pointermove', move);
+                       titleBar.addEventListener('pointerup', stop);
+                       titleBar.addEventListener('pointercancel', stop);
+                   });
+               });
+
+               // Register any initially minimized window in the taskbar.
+               desktop.querySelectorAll(':scope > .window.minimized, :scope > .window.minimized-by-default').forEach(function (windowElement) {
+                   minimizeWindow(windowElement);
+               });
+           }
+
+           if (document.readyState === 'loading') {
+               document.addEventListener('DOMContentLoaded', enableDragging);
+           } else {
+               enableDragging();
+           }
+       }());
+
+       function minimizeWindow(control) {
+           var windowElement = control.closest('.window');
+           if (!windowElement) return;
+           var taskbar = document.getElementById('taskbar');
+           var taskList = taskbar.querySelector('.window-tasks');
+           var button = document.getElementById('task-' + windowElement.id);
+           if (!button) {
+               button = document.createElement('button');
+               button.type = 'button';
+               button.id = 'task-' + windowElement.id;
+               button.className = 'task-button';
+               button.textContent = windowElement.querySelector('.title-bar-text').textContent;
+               button.onclick = function () { restoreWindow(windowElement); };
+               taskList.appendChild(button);
+           }
+           windowElement.classList.add('minimized');
+           button.classList.remove('active');
+           taskbar.classList.remove('hidden');
+       }
+
+       function restoreWindow(windowElement) {
+           var button = document.getElementById('task-' + windowElement.id);
+           windowElement.classList.remove('minimized');
+           window._taskbarZIndex = (window._taskbarZIndex || 10) + 1;
+           windowElement.style.zIndex = window._taskbarZIndex;
+           if (button) button.remove();
+       }
+
+       function toggleStartMenu() {
+           document.getElementById('start-menu').classList.toggle('open');
+       }
+
+       function closeStartMenu() {
+           document.getElementById('start-menu').classList.remove('open');
+       }
+   </script>
+
+   <audio id="error_sound" src="/media/error.wav"></audio> 
+   <audio id="shutdown" src="/media/shutdown.mp3"></audio> 
+   <audio id="startup" src="/media/startup.mp3"></audio> 
+   <audio id="music" src="/media/music.mp3"></audio> 
+</body>
+</html>

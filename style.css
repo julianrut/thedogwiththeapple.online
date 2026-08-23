@@ -1,0 +1,32 @@
+body {
+    background-color: black;
+    margin: 0;
+    background-image: url('/media/tile8.png');
+    background-repeat: repeat;
+}
+
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100dvh;
+    box-sizing: border-box;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.hidden{
+    display:none
+}
+
+.link_color:hover{
+    font-weight: bold;
+}
