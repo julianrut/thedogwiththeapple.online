@@ -31,6 +31,8 @@ function error_sound(){
 }
 
 function shutdown(){
+    document.getElementById("music").pause()
+
     const shutdownSound = document.getElementById("shutdown")
     shutdownSound.addEventListener("ended", () => {
         window.location.href = ('/shutdown')
